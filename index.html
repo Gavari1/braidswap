@@ -1,1 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sentence Braid 95™</title>
+  <style>
+    :root{
+      --bg:#9aa3ad;
+      --panel:#c9ced6;
+      --bezel:#6f7780;
+      --screen:#bfe3b9;
+      --screen2:#a8d8a2;
+      --text:#0b1a0b;
+      --btn:#e6e6e6;
+      --btn2:#d2d2d2;
+      --red:#c93b3b;
+      --blue:#2e5bd6;
+      --yellow:#d6b12e;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background: linear-gradient(180deg, #7f8892, var(--bg));
+      font-family: var(--sans);
+      color:#111;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      padding:16px;
+    }
+    .device{
+      width:min(900px, 100%);
+      background: linear-gradient(180deg, var(--panel), #b7bcc5);
+      border: 4px solid var(--bezel);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35), inset 0 2px 0 rgba(255,255,255,0.6);
+      padding:16px;
+      overflow:hidden;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:8px 10px 14px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      font-weight:800;
+      letter-spacing:0.5px;
+      text-transform:uppercase;
+      font-size:14px;
+      color:#222;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+    .brand .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #bbb);
+      border:1px solid rgba(0,0,0,0.25);
+    }
+    .model{
+      font-family: var(--mono);
+      font-size:12px;
+      color:#333;
+      opacity:0.9;
+    }
+    .screen-wrap{
+      background: #3a3f47;
+      border-radius: 12px;
+      padding:12px;
+      border: 3px solid #1f232a;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.08);
+    }
+    .screen{
+      background: linear-gradient(180deg, var(--screen), var(--screen2));
+      border-radius: 8px;
+      border: 2px solid rgba(0,0,0,0.45);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2);
+      padding:10px;
+      color: var(--text);
+      font-family: var(--mono);
+      max-width:100%;
+      overflow:hidden;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .label{
+      font-size:12px;
+      opacity:0.85;
+      flex: 1 1 auto;
+      min-width: 240px;
+    }
+    textarea{
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      display:block;
+      min-height:120px;
+      resize:vertical;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.45);
+      background: rgba(255,255,255,0.55);
+      color:#0c1a0c;
+      font-family: var(--mono);
+      font-size: 14px;
+      padding:10px;
+      outline:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+      overflow-wrap:anywhere;
+      word-break:break-word;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      width:100%;
+      margin:0 auto;
+      max-width:100%;
+    }
+    .split > div{ min-width:0; max-width:100%; }
+    @media (min-width: 820px){
+      .split{ grid-template-columns: 1fr 1fr; }
+      textarea{ min-height: 180px; }
+    }
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      padding:12px 2px 4px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    button{
+      border: 2px solid rgba(0,0,0,0.45);
+      background: linear-gradient(180deg, var(--btn), var(--btn2));
+      border-radius: 10px;
+      padding:10px 14px;
+      font-weight:700;
+      font-family: var(--sans);
+      cursor:pointer;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+      transition: transform 0.03s ease-in-out;
+    }
+    button:active{
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .btn-blue{
+      background: linear-gradient(180deg, #6ea0ff, var(--blue));
+      color:#071026;
+    }
+    .btn-yellow{
+      background: linear-gradient(180deg, #ffe08a, var(--yellow));
+      color:#241b05;
+    }
+    .btn-red{
+      background: linear-gradient(180deg, #ff6d6d, var(--red));
+      color:#140000;
+    }
+    .status{
+      font-family: var(--mono);
+      font-size:12px;
+      opacity:0.9;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .pill{
+      border:1px solid rgba(0,0,0,0.35);
+      background: rgba(255,255,255,0.35);
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .foot{
+      margin-top:10px;
+      font-size:12px;
+      opacity:0.85;
+      color:#222;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .foot code{ font-family: var(--mono); }
+  </style>
+</head>
+<body>
+  <div class="device" role="application" aria-label="Sentence Braid 95 Translator">
+    <div class="topbar">
+      <div class="brand"><span class="dot" aria-hidden="true"></span> SENTENCE BRAID 95™</div>
+      <div class="model">MODEL: SB-1996 • “CHEAP BUT LOUD” EDITION</div>
+    </div>
 
+    <div class="screen-wrap">
+      <div class="screen">
+        <div class="row">
+          <div class="label">
+            INPUT (Rule: 1st word, last word, 2nd word, 2nd-last…)
+          </div>
+        </div>
+
+        <div class="split">
+          <div>
+            <textarea id="inText" placeholder="Type a sentence...">The football is in the store.</textarea>
+          </div>
+          <div>
+            <div class="label" style="margin:0 0 6px;">OUTPUT (Braided + Vowel Swap)</div>
+            <textarea id="outText" readonly placeholder="Output appears here..."></textarea>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="btns">
+            <button class="btn-blue" id="btnTranslate">TRANSLATE</button>
+            <button class="btn-yellow" id="btnCopy">COPY OUTPUT</button>
+            <button class="btn-red" id="btnClear">CLEAR</button>
+          </div>
+
+          <div class="status">
+            <span class="pill" id="countWords">WORDS: 0</span>
+            <span class="pill" id="countChars">CHARS: 0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div>Tip: final punctuation moves to the last output word (e.g., <code>store.</code> → last word).</div>
+      <div>Live mode: typing updates output automatically.</div>
+    </div>
+  </div>
+
+  <script>
+    const inText = document.getElementById('inText');
+    const outText = document.getElementById('outText');
+    const btnTranslate = document.getElementById('btnTranslate');
+    const btnCopy = document.getElementById('btnCopy');
+    const btnClear = document.getElementById('btnClear');
+    const countWords = document.getElementById('countWords');
+    const countChars = document.getElementById('countChars');
+
+    // Split on whitespace into tokens
+    function tokenizeWords(text) {
+      return (text.trim().match(/\S+/g) || []);
+    }
+
+    // Pull ONLY final sentence punctuation from the very end of the input.
+    // Handles ., !, ?, ... and combos like "?!"
+    function extractFinalPunct(text) {
+      const trimmed = text.trim();
+      const m = trimmed.match(/[.!?]+$/);
+      return m ? m[0] : "";
+    }
+
+    // Remove final sentence punctuation from the last token ONLY (if present)
+    function stripPunctFromLastToken(tokens, finalPunct) {
+      if (!tokens.length || !finalPunct) return tokens;
+      const lastIdx = tokens.length - 1;
+
+      if (tokens[lastIdx].endsWith(finalPunct)) {
+        tokens[lastIdx] = tokens[lastIdx].slice(0, -finalPunct.length);
+      }
+      return tokens;
+    }
+
+    function braidWords(words) {
+      const out = [];
+      let i = 0;
+      let j = words.length - 1;
+      while (i <= j) {
+        if (i === j) out.push(words[i]);
+        else out.push(words[i], words[j]);
+        i++; j--;
+      }
+      return out;
+    }
+
+    // A↔O, E↔I, U↔Y (and Y↔U), preserving capitalization
+    function vowelSwap(s) {
+      const map = {
+        a:"o", o:"a", e:"i", i:"e", u:"y", y:"u",
+        A:"O", O:"A", E:"I", I:"E", U:"Y", Y:"U"
+      };
+      return s.replace(/[aeiouyAEIOUY]/g, ch => map[ch] || ch);
+    }
+
+    // NEW: split input into sentences (keeps ending punctuation with each sentence)
+    function splitSentences(text) {
+      return text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+    }
+
+    function translateNow() {
+      const src = inText.value || "";
+      const sentences = splitSentences(src);
+
+      const braidedSentences = [];
+
+      for (const sentence of sentences) {
+        const finalPunct = extractFinalPunct(sentence);
+
+        let words = tokenizeWords(sentence);
+        words = stripPunctFromLastToken(words, finalPunct);
+
+        const braided = braidWords(words);
+
+        // Re-attach final punctuation to LAST output word (per sentence)
+        if (braided.length && finalPunct) {
+          braided[braided.length - 1] = braided[braided.length - 1] + finalPunct;
+        }
+
+        braidedSentences.push(braided.join(" "));
+      }
+
+      // Apply vowel swap AFTER braiding + punctuation placement
+      const out = vowelSwap(braidedSentences.join(" "));
+      outText.value = out;
+
+      countWords.textContent = `WORDS: ${tokenizeWords(src).length}`;
+      countChars.textContent = `CHARS: ${src.length}`;
+    }
+
+    async function copyOutput() {
+      const text = outText.value || "";
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        btnCopy.textContent = "COPIED!";
+        setTimeout(() => (btnCopy.textContent = "COPY OUTPUT"), 900);
+      } catch (e) {
+        outText.focus();
+        outText.select();
+        document.execCommand('copy');
+        btnCopy.textContent = "COPIED!";
+        setTimeout(() => (btnCopy.textContent = "COPY OUTPUT"), 900);
+      }
+    }
+
+    function clearAll() {
+      inText.value = "";
+      outText.value = "";
+      translateNow();
+      inText.focus();
+    }
+
+    // Live update
+    inText.addEventListener('input', translateNow);
+
+    btnTranslate.addEventListener('click', translateNow);
+    btnCopy.addEventListener('click', copyOutput);
+    btnClear.addEventListener('click', clearAll);
+
+    translateNow();
+  </script>
+</body>
+</html>
